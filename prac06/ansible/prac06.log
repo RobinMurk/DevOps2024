@@ -1,0 +1,17 @@
+2024-11-27 16:05:15,422 p=88025 u=ubuntu n=ansible | PLAY [create] ****************************************************************************************
+2024-11-27 16:05:15,446 p=88025 u=ubuntu n=ansible | TASK [Gathering Facts] *******************************************************************************
+2024-11-27 16:05:16,549 p=88025 u=ubuntu n=ansible | ok: [localhost]
+2024-11-27 16:05:16,566 p=88025 u=ubuntu n=ansible | TASK [Delete the flask deployment] *******************************************************************
+2024-11-27 16:05:16,986 p=88025 u=ubuntu n=ansible | changed: [localhost]
+2024-11-27 16:05:16,996 p=88025 u=ubuntu n=ansible | TASK [debug] *****************************************************************************************
+2024-11-27 16:05:17,035 p=88025 u=ubuntu n=ansible | ok: [localhost] => {
+    "msg": "output of delete_out command: ['deployment.apps \"myflask\" deleted', 'service \"service-flaskapp\" deleted']"
+}
+2024-11-27 16:05:17,043 p=88025 u=ubuntu n=ansible | TASK [Create the flask deployment] *******************************************************************
+2024-11-27 16:05:17,446 p=88025 u=ubuntu n=ansible | changed: [localhost]
+2024-11-27 16:05:17,456 p=88025 u=ubuntu n=ansible | TASK [debug] *****************************************************************************************
+2024-11-27 16:05:17,477 p=88025 u=ubuntu n=ansible | ok: [localhost] => {
+    "msg": "output of create_out command: ['deployment.apps/myflask created', 'service/service-flaskapp created']"
+}
+2024-11-27 16:05:17,495 p=88025 u=ubuntu n=ansible | PLAY RECAP *******************************************************************************************
+2024-11-27 16:05:17,495 p=88025 u=ubuntu n=ansible | localhost                  : ok=5    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   

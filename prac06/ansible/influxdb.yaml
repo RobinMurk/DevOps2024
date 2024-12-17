@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pvolume
+  namespace: ex3
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: "kubernetes.io/hostname"
+          operator: In
+          values:
+          - k3snode1
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb-pvc
+  namespace: ex3
+spec:
+  storageClassName: manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb
+  namespace: ex3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - image: influxdb:2
+        imagePullPolicy: Always
+        name: influxdb
+        env:
+        - name: DOCKER_INFLUXDB_INIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: influx
+              key: username
+        - name: DOCKER_INFLUXDB_INIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: influx
+              key: password
+        - name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: influx
+              key: token
+        - name: DOCKER_INFLUXDB_INIT_ORG
+          value: UT
+        - name: DOCKER_INFLUXDB_INIT_MODE
+          value: setup
+        - name: DOCKER_INFLUXDB_INIT_BUCKET
+          value: weather_data
+
+        ports:
+           - containerPort: 8086
+        volumeMounts:
+        - mountPath: /var/lib/influxdb2
+          name: var-lib-influxdb
+      volumes:
+      - name: var-lib-influxdb
+        persistentVolumeClaim:
+          claimName: influxdb-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-influxdb
+  namespace: ex3
+spec:
+  type: NodePort
+  selector:
+    app: influxdb
+  ports:
+  - protocol: TCP
+    nodePort: 32673
+    port: 8086 # internal cluster port
+    targetPort: 8086 # Port your application listen on in pods/containers
+    name: tcp-8086

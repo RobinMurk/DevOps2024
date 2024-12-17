@@ -1,0 +1,38 @@
+---
+- hosts: k3s_workers
+
+  tasks:
+   - name: what is the present working directory
+     command: pwd
+     register: out
+   - debug:
+      var: out.stdout_lines
+   - debug:
+      msg: "present working directory is: {{out.stdout_lines}}"
+
+   - name: See what is in the current directory
+     command: ls
+     register: lsout
+   - debug:
+      msg: "output of ls command: {{lsout.stdout_lines}}"
+
+   - name: create a new directory
+     file: 
+       path: /home/ubuntu/mydir3
+       state: directory
+
+   - name: Create an empty file inside new directory
+     file:
+       path: /home/ubuntu/mydir3/emptyfile.txt
+       state: touch
+
+   - name: copy the file from local vm to the remote vm
+     copy: 
+      src: /home/ubuntu/sample.txt
+      dest: "/home/ubuntu/mydir3/"
+
+   - name: "list of files inside that new directory"
+     shell: "ls /home/ubuntu/mydir3/"
+     register: lsout
+   - debug:
+      msg: "list of files inside that new directory: {{lsout.stdout_lines}}"

@@ -1,0 +1,31 @@
+- name: create
+  hosts: k3s_controller
+  gather_facts: true
+  # become: true
+  become_user: ubuntu
+
+  tasks:
+
+    - name: Delete prom configmap
+      command: "k3s kubectl delete -f prometheus/config-map.yaml"
+
+    - name: Apply the new configMap
+      command: "k3s kubectl apply -f prometheus/config-map.yaml"
+
+    - name: Delete the alertmanager configmap
+      command: "k3s kubectl delete -f alertmanager/AlertManagerConfigmap.yaml"
+
+    - name: Apply the new alertmanager configmap
+      command: "k3s kubectl apply -f alertmanager/AlertManagerConfigmap.yaml"
+
+    - name: Delete the prom deployment
+      command: "k3s kubectl delete -f prometheus/prometheus-deployment.yaml"
+
+    - name: Apply the new prom deployment
+      command: "k3s kubectl apply -f prometheus/prometheus-deployment.yaml"
+
+    - name: Delete the alertmanager deployment
+      command: "k3s kubectl delete -f alertmanager/Deployment.yaml"
+
+    - name: Apply the new alertmanager deployment
+      command: "k3s kubectl apply -f alertmanager/Deployment.yaml"

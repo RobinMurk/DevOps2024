@@ -1,0 +1,6 @@
+Flask
+pandas
+influxdb-client
+requests
+pytest
+pytest-cov

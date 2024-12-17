@@ -1,0 +1,6 @@
+[k3s_controller]
+localhost ansible_connection=local
+
+[k3s_workers]
+k3snode1 ansible_host=172.17.89.109 ansible_port=22 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/.ssh/id_rsa
+k3snode2 ansible_host=172.17.89.251 ansible_port=22 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/.ssh/id_rsa

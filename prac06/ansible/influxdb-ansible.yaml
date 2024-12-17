@@ -1,0 +1,31 @@
+---
+- name: create
+  hosts: k3s_controller
+  gather_facts: true
+  become: true
+  become_user: ubuntu
+
+  tasks:
+    - name: Delete the existing secret influx
+      command: "k3s kubectl delete secret influx -n ex3"
+      register: delete_out
+    - debug:
+       msg: "output of delete_out command: {{delete_out.stdout_lines}}"
+
+    - name: Create a secrets for influx
+      command: "k3s kubectl create secret generic influx --from-literal=token={{ lookup('env','INFLUXDB_TOKEN') }}  --from-literal=username={{ lookup('env','INFLUXDB_USERNAME') }} --from-literal=password={{ lookup('env','INFLUXDB_PASSWORD') }} -n ex3"
+      register: create_out
+    - debug: 
+       msg: "output of create_out command: {{create_out.stdout_lines}}"
+
+    - name: Delete the influxdb deployment
+      command: "k3s kubectl delete -f influxdb.yaml"
+      register: delete_out
+    - debug:
+       msg: "output of delete_out command: {{delete_out.stdout_lines}}"
+
+    - name: Create the influxdb deployment 
+      command: "k3s kubectl apply -f influxdb.yaml"
+      register: create_out
+    - debug:
+       msg: "output of create_out command: {{create_out.stdout_lines}}"

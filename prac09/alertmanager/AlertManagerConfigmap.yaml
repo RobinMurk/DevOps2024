@@ -1,0 +1,27 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: alertmanager-config
+  namespace: monitoring
+data:
+  config.yml: |-
+    global:
+      http_config: 
+        tls_config: 
+          insecure_skip_verify: true
+    route:
+      receiver: "Zulip-notifications"
+      group_by: ['alertname', 'priority']
+      group_wait: 10s
+      repeat_interval: 10s
+      routes:
+        - receiver: "Zulip-notifications"
+          match:
+            severity: critical
+          group_wait: 10s
+          repeat_interval: 10s
+
+    receivers:
+    - name: "Zulip-notifications"
+      webhook_configs:
+      - url: "https://zulip.cs.ut.ee/api/v1/external/alertmanager?api_key=U4gH8QU8Bu9vHRwB3ObEeeFw0oG2hQ4X&stream=DevOps2024Fall&topic=Lab9-Alerts"

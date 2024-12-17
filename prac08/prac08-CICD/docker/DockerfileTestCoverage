@@ -1,0 +1,23 @@
+FROM python:3
+
+WORKDIR /usr/src/app
+
+COPY ./ .
+
+RUN pip install -r ./flask_app/requirements.txt
+
+ARG STUD_INFLUX_HOST_ADD
+ARG STUD_INFLUX_ORG
+ARG STUD_INFLUX_TOKEN
+
+ENV STUD_INFLUX_HOST_ADD=$STUD_INFLUX_HOST_ADD
+ENV STUD_INFLUX_ORG=$STUD_INFLUX_ORG
+ENV STUD_INFLUX_TOKEN=$STUD_INFLUX_TOKEN
+
+RUN mkdir report
+
+RUN coverage run -m pytest || true
+
+RUN coverage report
+
+CMD ["coverage", "xml", "-o", "./report/coverage_report.xml", "--omit=/usr/lib/*"]

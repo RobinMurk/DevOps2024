@@ -1,0 +1,76 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.3.3, pluggy-1.5.0
+rootdir: /home/ubuntu/prac08/prac08-cicd-testing
+plugins: cov-6.0.0
+collected 3 items
+
+flask_app/app_with_pytest.py .FF                                         [100%]
+
+=================================== FAILURES ===================================
+________________________________ test_get_data _________________________________
+
+    def test_get_data():
+        global client
+        global query
+        df = get_data(client, query)
+>       assert df.empty == False
+E       assert True == False
+E        +  where True = Empty DataFrame\nColumns: []\nIndex: [].empty
+
+flask_app/app_with_pytest.py:40: AssertionError
+----------------------------- Captured stdout call -----------------------------
+>>> Request: 'POST http://172.17.90.162:32673/api/v2/query?org=UT'
+>>> Accept: application/json
+>>> Content-Type: application/json
+>>> Authorization: ***
+>>> User-Agent: influxdb-client-python/1.48.0
+>>> Body: {'extern': {'imports': [], 'body': []}, 'query': '\n        from(bucket: "weather_data") \n        |> range(start:-20m, stop: now())\n        |> filter(fn: (r) => r._measurement == "weather")\n        |> filter(fn: (r) => r._field == "temp")\n        |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")', 'dialect': {'header': True, 'delimiter': ',', 'annotations': ['datatype', 'group', 'default'], 'commentPrefix': '#', 'dateTimeFormat': 'RFC3339'}}
+<<< Response: 200
+<<< Content-Type: text/csv; charset=utf-8
+<<< Vary: Accept-Encoding
+<<< X-Influxdb-Build: OSS
+<<< X-Influxdb-Version: v2.7.10
+<<< Date: Sun, 01 Dec 2024 13:17:19 GMT
+<<< Transfer-Encoding: chunked
+<<< Body: b'\r\n'
+------------------------------ Captured log call -------------------------------
+DEBUG    influxdb_client.client.http:rest.py:66 >>> Request: 'POST http://172.17.90.162:32673/api/v2/query?org=UT'
+DEBUG    influxdb_client.client.http:rest.py:82 >>> Accept: application/json
+DEBUG    influxdb_client.client.http:rest.py:82 >>> Content-Type: application/json
+DEBUG    influxdb_client.client.http:rest.py:82 >>> Authorization: ***
+DEBUG    influxdb_client.client.http:rest.py:82 >>> User-Agent: influxdb-client-python/1.48.0
+DEBUG    influxdb_client.client.http:rest.py:74 >>> Body: {'extern': {'imports': [], 'body': []}, 'query': '\n        from(bucket: "weather_data") \n        |> range(start:-20m, stop: now())\n        |> filter(fn: (r) => r._measurement == "weather")\n        |> filter(fn: (r) => r._field == "temp")\n        |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")', 'dialect': {'header': True, 'delimiter': ',', 'annotations': ['datatype', 'group', 'default'], 'commentPrefix': '#', 'dateTimeFormat': 'RFC3339'}}
+DEBUG    urllib3.util.retry:retry.py:286 Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0, status=None)
+DEBUG    urllib3.connectionpool:connectionpool.py:243 Starting new HTTP connection (1): 172.17.90.162:32673
+DEBUG    urllib3.connectionpool:connectionpool.py:546 http://172.17.90.162:32673 "POST /api/v2/query?org=UT HTTP/11" 200 None
+DEBUG    influxdb_client.client.http:rest.py:70 <<< Response: 200
+DEBUG    influxdb_client.client.http:rest.py:82 <<< Content-Type: text/csv; charset=utf-8
+DEBUG    influxdb_client.client.http:rest.py:82 <<< Vary: Accept-Encoding
+DEBUG    influxdb_client.client.http:rest.py:82 <<< X-Influxdb-Build: OSS
+DEBUG    influxdb_client.client.http:rest.py:82 <<< X-Influxdb-Version: v2.7.10
+DEBUG    influxdb_client.client.http:rest.py:82 <<< Date: Sun, 01 Dec 2024 13:17:19 GMT
+DEBUG    influxdb_client.client.http:rest.py:82 <<< Transfer-Encoding: chunked
+DEBUG    influxdb_client.client.http:rest.py:74 <<< Body: b'\r\n'
+______________________________ test_convert_time _______________________________
+
+    def test_convert_time():
+        global df
+        df = convert_time(df)
+>       assert df.empty == False
+E       assert True == False
+E        +  where True = Empty DataFrame\nColumns: []\nIndex: [].empty
+
+flask_app/app_with_pytest.py:45: AssertionError
+=========================== short test summary info ============================
+FAILED flask_app/app_with_pytest.py::test_get_data - assert True == False
+FAILED flask_app/app_with_pytest.py::test_convert_time - assert True == False
+========================= 2 failed, 1 passed in 0.50s ==========================
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.3.3, pluggy-1.5.0
+rootdir: /home/ubuntu/prac08/prac08-cicd-testing
+plugins: cov-6.0.0
+collected 3 items
+
+flask_app/app_with_pytest.py ...                                         [100%]
+
+============================== 3 passed in 0.67s ===============================

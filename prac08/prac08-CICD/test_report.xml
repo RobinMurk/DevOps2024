@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="0.772" timestamp="2024-12-01T14:15:51.441101+00:00" hostname="c42f455a29a8"><testcase classname="unit_test.test_app.test_analyze_app" name="test_convert_time" time="0.019"><failure message="AssertionError: True is not false">self = &lt;test_app.test_analyze_app testMethod=test_convert_time&gt;
+
+    def test_convert_time(self):
+&gt;       self.assertFalse(convert_time(self.test_df).empty)
+E       AssertionError: True is not false
+
+unit_test/test_app.py:24: AssertionError</failure></testcase><testcase classname="unit_test.test_app.test_analyze_app" name="test_get_data" time="0.007"><failure message="AssertionError: True is not false">self = &lt;test_app.test_analyze_app testMethod=test_get_data&gt;
+
+    def test_get_data(self):
+&gt;       self.assertFalse(get_data(self.client, self.query).empty) # we are expecting some data
+E       AssertionError: True is not false
+
+unit_test/test_app.py:22: AssertionError</failure></testcase><testcase classname="unit_test.test_app.test_analyze_app" name="test_is_df_empty" time="0.003"><failure message="AssertionError: True is not false">self = &lt;test_app.test_analyze_app testMethod=test_is_df_empty&gt;
+
+    def test_is_df_empty(self):
+&gt;       self.assertFalse(is_df_empty(self.test_df))
+E       AssertionError: True is not false
+
+unit_test/test_app.py:26: AssertionError</failure></testcase></testsuite></testsuites>

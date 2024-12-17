@@ -1,0 +1,173 @@
+openapi: 3.0.3
+info:
+  title: Swagger- Tartu City Weather API
+  description: This is a sample weather api
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: http://172.17.91.59:8080
+tags:
+- name: Humidity
+  description: Everything about air humidity of Tartu city
+  externalDocs:
+    description: Find out more
+    url: http://172.17.88.243:8080
+paths:
+  /humidity:
+    put:
+      tags:
+      - Humidity
+      summary: Update an existing average humidity value for the day
+      description: Update an existing average humidity value for the day
+      operationId: update_avg_humidity
+      requestBody:
+        description: Update an existing average humidity value for the day
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bodytemplate'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid date supplied
+        "404":
+          description: Avg humidity not found for the given tags
+      x-openapi-router-controller: swagger_server.controllers.humidity_controller
+    post:
+      tags:
+      - Humidity
+      summary: Add a new measurement (Avg humidity for the day) to the database
+      description: Add a new measurement (Avg humidity for the day) to the database
+      operationId: add_humidity_measurement
+      requestBody:
+        description: Add a new measurement (Avg humidity for the day) to the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bodytemplate'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Invalid input
+      x-openapi-router-controller: swagger_server.controllers.humidity_controller
+  /humidity/{timeframe}:
+    get:
+      tags:
+      - Humidity
+      summary: "Get humidity data  by timeframe(previous 1hr,6hr,1day,1week)"
+      description: Returns a data in json
+      operationId: get_humidity_bytimeframe
+      parameters:
+      - name: timeframe
+        in: path
+        description: "Values: 1hr,6hr,1day,1week"
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: string
+          example: 1hr
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/humidity'
+        "400":
+          description: Invalid timeframe supplied
+        "404":
+          description: Data not found
+      x-openapi-router-controller: swagger_server.controllers.humidity_controller
+    delete:
+      tags:
+      - Humidity
+      summary: Delete humidity data for a given day
+      description: Returns a successful delete message
+      operationId: delete_hum_bytimeframe
+      parameters:
+      - name: timeframe
+        in: path
+        description: timeframe to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: string
+          example: 2023-10-05T00:00:00Z
+      responses:
+        "200":
+          description: successful delete operation
+        "400":
+          description: Invalid timeframe supplied
+        "404":
+          description: Data not found
+      x-openapi-router-controller: swagger_server.controllers.humidity_controller
+components:
+  schemas:
+    bodytemplate:
+      required:
+      - field
+      - measurement
+      - tags
+      type: object
+      properties:
+        field:
+          type: string
+          example: avg_hum_day
+        measurement:
+          type: string
+          example: weather_stat
+        tags:
+          $ref: '#/components/schemas/bodytemplate_tags'
+    humidity:
+      required:
+      - _measurement
+      - _time
+      - station
+      - temp
+      type: object
+      properties:
+        _measurement:
+          type: string
+          example: weather
+        _time:
+          type: string
+          example: "1696938068000"
+        station:
+          type: string
+          example: Tartu
+        temp:
+          type: number
+          example: 269.9
+      example:
+        _measurement: weather
+        _time: 1696938068000
+        station: Tartu
+        temp: 269.9
+    bodytemplate_tags:
+      type: object
+      properties:
+        station:
+          type: string
+          example: Tartu
+        date:
+          type: string
+      example:
+        station: Tartu
+        date: 2023-10-09
+

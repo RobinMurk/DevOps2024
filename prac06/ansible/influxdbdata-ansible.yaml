@@ -1,0 +1,18 @@
+---
+- name: create
+  hosts: k3s_controller
+  gather_facts: true
+  become: true
+  become_user: ubuntu
+  tasks:
+    - name: Delete the influxdbdata deployment
+      command: "k3s kubectl delete -f influxdbdata.yaml"
+      register: delete_out
+    - debug:
+       msg: "output of delete_out command: {{delete_out.stdout_lines}}"
+
+    - name: Create the influxdbdata deployment
+      command: "k3s kubectl apply -f influxdbdata.yaml"
+      register: create_out
+    - debug:
+       msg: "output of create_out command: {{create_out.stdout_lines}}"
