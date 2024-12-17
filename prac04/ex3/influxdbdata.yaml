@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdbdata-deployment
+  namespace: ex3
+  labels:
+    app: influxdbdata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdbdata
+  template:
+    metadata:
+      labels:
+        app: influxdbdata
+    spec:
+      containers:
+      - name: influxdbdata
+        image: reachchinu/devops2024:influxdbdata #shivupoojar/devops2023:influxdbdata
+        env:
+        - name: PI_INFLUX_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: piinflux
+              key: TOKEN_PI
+        - name: PI_INFLUX_HOST_ADD
+          valueFrom:
+            configMapKeyRef:
+              name: pihost
+              key: host
+        - name: PI_INFLUX_ORG
+          value: "UT"
+        - name: STUD_INFLUX_HOST_ADD
+          valueFrom:
+            configMapKeyRef:
+              name: studhost
+              key: host
+        - name: STUD_INFLUX_ORG
+          value: "UT"
+        - name: STUD_INFLUX_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: influx
+              key: token
