@@ -1,8 +1,0 @@
-[init]
-	defaultBranch = none
-[fetch]
-	recurseSubmodules = false
-[transfer]
-	bundleURI = true
-[http "https://gitlab.cs.ut.ee"]
-	sslCAInfo = /home/ubuntu/builds/t3_4CWF4R/0/devops2024-fall/students/devops2024Fall-Murk-C08154/prac08-cicd-testing.tmp/CI_SERVER_TLS_CA_FILE
